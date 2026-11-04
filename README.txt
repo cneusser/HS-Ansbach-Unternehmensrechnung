@@ -1,0 +1,1 @@
+Hochladen nach GitHub: Repository "HS_Ansbach" unter cneusser anlegen, den INHALT dieses Ordners hochladen, unter Settings > Pages "Deploy from a branch", main, / (root) wählen. URL: https://cneusser.github.io/HS_Ansbach/
