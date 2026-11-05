@@ -1,13 +1,10 @@
-// Firebase-Zugang für das Live-Quiz. Ohne Eintrag läuft das Quiz im Demo-Modus (nur ein Browser).
-// Anleitung: Firebase-Konsole > Projekt anlegen > Realtime Database erstellen (Standort europe-west1)
-// > Projekteinstellungen > Web-App hinzufügen > das angezeigte firebaseConfig-Objekt hier einsetzen.
-window.FIREBASE_CONFIG = null;
-/* Beispiel:
+// Firebase-Zugang für das Live-Quiz (Projekt ansbach-quiz). Der apiKey ist öffentlich, den Zugriff regeln die Datenbankregeln.
 window.FIREBASE_CONFIG = {
-  apiKey: "...",
-  authDomain: "....firebaseapp.com",
-  databaseURL: "https://...-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "...",
-  appId: "..."
+  apiKey: "AIzaSyAuHF4cGgmjU4xlN6NmAuCsNt1WrTSi0wU",
+  authDomain: "ansbach-quiz.firebaseapp.com",
+  databaseURL: "https://ansbach-quiz-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "ansbach-quiz",
+  storageBucket: "ansbach-quiz.firebasestorage.app",
+  messagingSenderId: "657164573777",
+  appId: "1:657164573777:web:0c07e3c95466bcee5dac70"
 };
-*/

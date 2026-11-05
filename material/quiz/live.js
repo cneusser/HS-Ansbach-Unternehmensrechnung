@@ -55,23 +55,52 @@ function points(ans, qStart) {
   return Math.round(1000 * (1 - 0.5 * el / (LIMIT * 1000)));
 }
 
+// ---------------- Effekte: Feuerwerk und Konfetti ----------------
+function fx(kind, ms) {
+  const cv = document.createElement('canvas'); cv.className = 'fx';
+  document.body.appendChild(cv); const c = cv.getContext('2d');
+  const W = cv.width = innerWidth * devicePixelRatio, H = cv.height = innerHeight * devicePixelRatio;
+  const cols = ['#C9A86A', '#F4D58D', '#7fd1a8', '#ffffff', '#C8D7EE', '#e9b04f'];
+  const P = []; const t0 = performance.now(); let lastBurst = 0;
+  const burst = (x, y, n, sp) => { for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, v = (0.4 + Math.random()) * sp; P.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, l: 1, col: cols[i % cols.length], r: (1.5 + Math.random() * 2.5) * devicePixelRatio, k: 'f' }); } };
+  const confetti = n => { for (let i = 0; i < n; i++) P.push({ x: Math.random() * W, y: -Math.random() * H * 0.3, vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 4, l: 1, col: cols[i % cols.length], r: (4 + Math.random() * 5) * devicePixelRatio, k: 'c', rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3 }); };
+  if (kind === 'confetti') confetti(160);
+  (function frame(now) {
+    const el = now - t0; c.clearRect(0, 0, W, H);
+    if (kind === 'fireworks' && el < ms - 800 && now - lastBurst > 380) { lastBurst = now; burst(W * (0.15 + Math.random() * 0.7), H * (0.15 + Math.random() * 0.4), 90, 7 * devicePixelRatio); }
+    P.forEach(p => {
+      if (p.k === 'f') { p.vx *= 0.985; p.vy = p.vy * 0.985 + 0.08 * devicePixelRatio; p.l -= 0.012; }
+      else { p.vy += 0.04; p.rot += p.vr; if (el > ms - 900) p.l -= 0.03; }
+      p.x += p.vx; p.y += p.vy; if (p.l <= 0) return;
+      c.globalAlpha = Math.max(0, p.l); c.fillStyle = p.col;
+      if (p.k === 'f') { c.beginPath(); c.arc(p.x, p.y, p.r, 0, 6.283); c.fill(); }
+      else { c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); c.restore(); }
+    });
+    if (el < ms) requestAnimationFrame(frame); else cv.remove();
+  })(t0);
+}
+const fmtS = ms => (ms / 1000).toFixed(1).replace('.', ',') + ' s';
+
 // ---------------- Host ----------------
 function host(B) {
   const base = location.href.split('?')[0];
   const joinUrl = base + '?set=' + SETNAME;
-  let g = null, timer = null, revealing = false;
+  let g = null, timer = null, revealing = false, fxDone = '';
   B.on('games/' + PIN, v => { g = v; render(); });
   const reset = () => B.set('games/' + PIN, { state: 'lobby', q: -1, created: B.stamp() });
   const start = (i) => B.update('games/' + PIN, { state: 'question', q: i, qStart: B.stamp() });
   async function reveal() {
     if (revealing || !g || g.state !== 'question') return; revealing = true;
     const q = g.q, ans = (g.answers && g.answers[q]) || {}, sc = g.scores || {}, upd = {};
+    let best = null;
     Object.keys(g.players || {}).forEach(pid => {
       const a = ans[pid]; const old = sc[pid] ? sc[pid].total : 0;
       const ok = a && a.c === SET.questions[q].a && (a.t - g.qStart) <= LIMIT * 1000 + 1500;
       const pts = ok ? points(a, g.qStart) : 0;
       upd['scores/' + pid] = { total: old + pts, last: pts, ok: !!ok, answered: !!a };
+      if (ok) { const ms = Math.max(0, a.t - g.qStart); if (!best || ms < best.ms) best = { pid, name: g.players[pid].name, ms }; }
     });
+    upd['qwin/' + q] = best || { pid: '', name: '', ms: 0 };
     upd.state = 'reveal';
     await B.update('games/' + PIN, upd); revealing = false;
   }
@@ -105,8 +134,9 @@ function host(B) {
       const rev = g.state === 'reveal';
       app.innerHTML = `<div class="host q"><div class="top"><span>Frage ${g.q + 1} von ${SET.questions.length}</span><span id="clock"></span><span>${Object.keys(ans).length} von ${players.length} geantwortet</span></div>
       <div class="hq">${esc(q.q)}</div><div class="ans">${q.o.map((o, j) => `<div class="a ${COLS[j]} ${rev ? (j === q.a ? 'win' : 'dim') : ''}"><b>${LABS[j]}</b><span>${esc(o)}</span>${rev ? `<em>${cnt[j]}</em>` : ''}</div>`).join('')}</div>
-      ${rev ? `<div class="why">${esc(q.why)}</div><div class="lb">${board(5).map((r, i) => `<div><span>${i + 1}</span><span>${esc(r.n)}</span><b>${r.p}</b></div>`).join('')}</div>` : ''}
+      ${rev ? `${(g.qwin && g.qwin[g.q] && g.qwin[g.q].name) ? `<div class="crown">👑 Schnellste richtige Antwort: <b>${esc(g.qwin[g.q].name)}</b> in ${fmtS(g.qwin[g.q].ms)}</div>` : '<div class="crown">Diesmal niemand richtig. Nächste Chance!</div>'}<div class="why">${esc(q.why)}</div><div class="lb">${board(5).map((r, i) => `<div><span>${i + 1}</span><span>${esc(r.n)}</span><b>${r.p}</b></div>`).join('')}</div>` : ''}
       <div class="keys">Leertaste: ${rev ? 'weiter' : 'auflösen'}</div></div>`;
+      if (rev && fxDone !== 'q' + g.q && g.qwin && g.qwin[g.q] && g.qwin[g.q].name) { fxDone = 'q' + g.q; fx('fireworks', 3200); }
       if (!rev) {
         const tick = () => {
           const left = Math.max(0, Math.ceil((g.qStart + LIMIT * 1000 - B.now()) / 1000));
@@ -124,6 +154,7 @@ function host(B) {
       <div class="lb small">${b.slice(3, 12).map((r, i) => `<div><span>${i + 4}</span><span>${esc(r.n)}</span><b>${r.p}</b></div>`).join('')}</div>
       <button class="ghost" id="rs">Neue Runde</button></div>`;
       document.getElementById('rs').onclick = reset;
+      if (fxDone !== 'end' && b[0]) { fxDone = 'end'; fx('fireworks', 6000); setTimeout(() => fx('confetti', 5000), 600); }
     }
   }
 }
@@ -133,7 +164,7 @@ function player(B) {
   let pid = null; try { pid = sessionStorage.getItem('lq_pid_' + PIN); } catch (e) {}
   if (!pid) { pid = 'p' + Math.random().toString(36).slice(2, 10); try { sessionStorage.setItem('lq_pid_' + PIN, pid); } catch (e) {} }
   let name = null; try { name = localStorage.getItem('lq_name_' + PIN); } catch (e) {}
-  let g = null, sentQ = -1;
+  let g = null, sentQ = -1, fxDone = '';
   B.on('games/' + PIN, v => { g = v; render(); });
   function join(n) {
     name = n.trim().slice(0, 16); if (!name) return;
@@ -165,14 +196,17 @@ function player(B) {
     }
     const R = rank();
     if (g.state === 'reveal') {
-      const ok = R.me && R.me.ok;
-      app.innerHTML = `<div class="pl res ${ok ? 'ok' : 'no'}"><h1>${ok ? 'Richtig' : (R.me && R.me.answered ? 'Leider falsch' : 'Keine Antwort')}</h1><p class="pts">+ ${R.me ? R.me.last : 0} Punkte</p><p>Gesamt ${R.me ? R.me.total : 0} · Platz ${R.r || '?'} von ${R.n}</p></div>`; return;
+      const ok = R.me && R.me.ok; const qw = g.qwin && g.qwin[g.q]; const fastest = ok && qw && qw.pid === pid;
+      app.innerHTML = `<div class="pl res ${ok ? 'ok' : 'no'}">${fastest ? '<div class="crown sm">👑 Sie waren am schnellsten!</div>' : ''}<h1>${ok ? 'Richtig' : (R.me && R.me.answered ? 'Leider falsch' : 'Keine Antwort')}</h1><p class="pts">+ ${R.me ? R.me.last : 0} Punkte</p><p>Gesamt ${R.me ? R.me.total : 0} · Platz ${R.r || '?'} von ${R.n}</p>${qw && qw.name && !fastest ? `<p class="small">Am schnellsten: ${esc(qw.name)} in ${fmtS(qw.ms)}</p>` : ''}</div>`;
+      if (ok && R.me && fxDone !== 'q' + g.q) { fxDone = 'q' + g.q; fx(fastest ? 'fireworks' : 'confetti', fastest ? 3000 : 2500); }
+      return;
     }
-    if (g.state === 'end') app.innerHTML = `<div class="pl res"><h1>Platz ${R.r} von ${R.n}</h1><p class="pts">${R.me ? R.me.total : 0} Punkte</p><p>Danke fürs Mitspielen. Material und Selbsttest: <a href="../">Übersicht</a></p></div>`;
+    if (g.state === 'end' && R.r === 1 && fxDone !== 'end') { fxDone = 'end'; fx('fireworks', 5000); }
+    if (g.state === 'end') app.innerHTML = `<div class="pl res">${R.r === 1 ? '<div class="crown sm">🏆 Sieg!</div>' : ''}<h1>Platz ${R.r} von ${R.n}</h1><p class="pts">${R.me ? R.me.total : 0} Punkte</p><p>Danke fürs Mitspielen. Material und Selbsttest: <a href="../">Übersicht</a></p></div>`;
   }
 }
 
-function modeNote(B) { return B.mode === 'demo' ? '<p class="note">Demo-Modus: nur Fenster in diesem Browser spielen mit. Für den Hörsaal Firebase in config.js eintragen.</p>' : ''; }
+function modeNote(B) { return B.mode === 'demo' ? '<p class="note warn">DEMO-MODUS: Keine Verbindung zum Server, Handys spielen nicht mit. Prüfen Sie, ob config.js mit der Firebase-Konfiguration hochgeladen ist.</p>' : '<p class="note">Verbunden mit dem Quiz-Server.</p>'; }
 
 (async () => {
   let B;

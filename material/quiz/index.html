@@ -45,6 +45,12 @@ button{font:inherit;cursor:pointer}
 .p{width:18vw;border-radius:1.6vh 1.6vh 0 0;background:#2b3e6e;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:2vh}
 .p span{font-size:3vh;font-weight:700}.p b{font-size:2.6vh;color:var(--gold)}.p i{font-style:normal;font-size:6vh;font-weight:800}
 .p1{height:34vh;background:var(--gold);color:var(--navy)}.p1 b{color:var(--navy)}.p2{height:26vh}.p3{height:20vh}
+.fx{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
+.crown{display:inline-block;background:var(--gold);color:var(--navy);border-radius:999px;padding:1vh 2.4vh;font-size:3vh;font-weight:700;margin-top:3vh;animation:pop .6s ease-out}
+.crown.sm{font-size:18px;padding:8px 16px;margin:0 0 10px}
+.note.warn{color:#fff;background:#9B2F2F;padding:8px 12px;border-radius:8px;opacity:1}
+.small{font-size:14px!important}
+@keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
 </style></head><body><div id="app"></div>
 <script src="config.js"></script><script src="sets.js"></script><script type="module" src="live.js"></script>
 </body></html>
