@@ -1,16 +1,40 @@
 window.QUIZSETS = {
   pflicht: { title: 'Blitzquiz Rückstellungen', kicker: 'Buchführung und Bilanzierung · 2. Semester', seconds: 15, qr: 'qr_pflicht.png', questions: [
-    { q: 'Für eine Werbekampagne im März 2027 sollen 50.000 EUR zurückgestellt werden. Rückstellung zum 31.12.2026?', o: ['Ja, Pflicht', 'Wahlrecht', 'Nein, Verbot'], a: 2,
+    { z: 'Ziel 1 · unterscheiden', q: 'Für eine Werbekampagne im März 2027 sollen 50.000 EUR zurückgestellt werden. Rückstellung zum 31.12.2026?', o: ['Ja, Pflicht', 'Wahlrecht', 'Nein, Verbot'], a: 2,
       why: 'Keine Verpflichtung gegenüber Dritten, kein Katalogfall: § 249 Abs. 2 Satz 1 HGB.' },
-    { q: 'Die 2026 unterlassene Dachreparatur wird am 20. März 2027 nachgeholt. Rückstellung?', o: ['Ja, Pflicht', 'Wahlrecht', 'Nein, Verbot'], a: 0,
-      why: 'Unterlassene Instandhaltung, nachgeholt in den ersten drei Monaten: § 249 Abs. 1 Satz 2 Nr. 1 HGB.' },
-    { q: 'Buchungssatz bei Bildung der Gewährleistungsrückstellung am 31.12.2026?', o: ['Rückstellung an Bank', 'Aufwand an Rückstellung', 'Rückstellung an Ertrag'], a: 1,
+    { z: 'Ziel 1 · unterscheiden', q: 'Die GmbH bürgt für einen Partner, der seit Jahren pünktlich zahlt. Wie erscheint das im Abschluss?', o: ['Rückstellung', 'Haftungsverhältnis', 'Verbindlichkeit'], a: 1,
+      why: 'Inanspruchnahme unwahrscheinlich, also keine Rückstellung, aber Angabe unter der Bilanz oder im Anhang: §§ 251, 268 Abs. 7 HGB.' },
+    { z: 'Ziel 2 · zuordnen', q: 'Die 2026 unterlassene Dachreparatur wird am 20. März 2027 nachgeholt. Rückstellung?', o: ['Ja, Pflicht', 'Wahlrecht', 'Nein, Verbot'], a: 0,
+      why: 'Unterlassene Instandhaltung, nachgeholt in den ersten drei Monaten: § 249 Abs. 1 Satz 2 Nr. 1 HGB. Im Juli wäre sie verboten.' },
+    { z: 'Ziel 3 · bewerten', q: 'Die Nachbesserung kostet laut Kalkulation 80.000 EUR und wird im Mai 2027 erledigt. Mit welchem Betrag bewerten Sie?', o: ['80.000 EUR', 'erst bei Zahlung', 'abgezinst, rund 78.400 EUR'], a: 0,
+      why: 'Erfüllungsbetrag nach vernünftiger kaufmännischer Beurteilung; Restlaufzeit unter einem Jahr, also keine Abzinsung (§ 253 HGB).' },
+    { z: 'Ziel 3 · buchen', q: 'Buchungssatz bei Bildung der Gewährleistungsrückstellung am 31.12.2026?', o: ['Rückstellung an Bank', 'Aufwand an Rückstellung', 'Rückstellung an Ertrag'], a: 1,
       why: 'Bei Bildung fließt kein Geld. Der Aufwand trifft 2026, die Gegenbuchung ist die Rückstellung.' } ] },
-  wahl: { title: 'Blitzquiz KI prüfen', kicker: 'Controlling im Zeitalter der KI', seconds: 15, qr: 'qr_wahl.png', questions: [
-    { q: 'Der KI-Kommentar nennt „gestiegene Stahlpreise“. Wie prüfen Sie das?', o: ['Nachrechnen', 'Quelle verlangen', 'Gar nicht, klingt plausibel'], a: 1,
-      why: 'Eine Ursache steht in keiner Tabelle. Sie wird belegt, nicht gerechnet.' },
-    { q: 'Zweiter Lauf, gleicher Auftrag, gleiche Daten, andere Ursache. Was folgt?', o: ['Modell defekt', 'Ursache gilt als offen', 'Besseren Lauf nehmen'], a: 1,
-      why: 'Was zwischen Läufen wechselt, ist nicht belegt. Den besseren Lauf zu wählen wäre Auswahl nach Gefallen.' },
-    { q: 'Welches Element im Auftrag senkt den Prüfaufwand am stärksten?', o: ['Höflicher Ton', 'Ursache nur mit Quelle', 'Längerer Text'], a: 1,
-      why: 'Wer die Quelle je Ursache erzwingt, prüft Belege statt Sätze.' } ] }
+  wahl: { type: 'builder', title: 'Prüfwerkstatt und Auftrags-Duell', kicker: 'Controlling im Zeitalter der KI', seconds: 60, maxPick: 4, qr: 'qr_wahl.png',
+    intro: 'Einmal beitreten, zwei Runden: Erst prüfen Sie eine Aussage des KI-Kommentars, dann bauen Sie den besseren Auftrag. Beide Runden zählen für die Gesamtwertung.',
+    work: { seconds: 180, title: 'Prüfwerkstatt',
+      kommentar: 'Der Deckungsbeitrag der Produktlinie Getriebe lag im Oktober mit 297.000 EUR um 103.000 EUR unter Plan.',
+      daten: [['', 'Plan', 'Ist'], ['Menge (Stück)', '1.000', '900'], ['Preis je Stück', '1.200 EUR', '1.150 EUR'], ['variable Kosten je Stück', '800 EUR', '820 EUR'], ['Deckungsbeitrag je Stück', '400 EUR', '330 EUR'], ['Deckungsbeitrag', '400.000 EUR', '297.000 EUR']],
+      formel: 'Mengenabweichung = (Ist-Menge minus Plan-Menge) mal Plan-Deckungsbeitrag je Stück. Preis (minus 45.000 EUR) und Kosten (minus 18.000 EUR) sind vorgerechnet.',
+      aussagen: [
+        { id: 'A', reihe: 'Erste Reihe', t: 'Hauptursache ist der Absatzrückgang: Mit 900 statt 1.000 Stück erklärt die geringere Menge den Großteil der Abweichung.', ok: false, beleg: ['zerl'] },
+        { id: 'B', reihe: 'Zweite Reihe', t: 'Zusätzlich belasten gestiegene Stahlpreise die variablen Kosten.', ok: false, beleg: ['einkauf'] },
+        { id: 'C', reihe: 'Dritte Reihe und dahinter', t: 'Da der Absatz rückläufig ist, empfehlen wir, die Jahresprognose um 10 Prozent zu senken.', ok: false, beleg: ['verschub', 'absatz'] } ],
+      belege: [
+        { id: 'zerl', t: 'Eigene Rechnung: Die Menge erklärt 40.000 von 103.000 EUR, der Preis 45.000 EUR' },
+        { id: 'absatz', t: 'Absatz: August 1.020, September 1.010, Oktober 900 Stück (Plan je 1.000)' },
+        { id: 'verschub', t: 'Vertrieb, 14.10.: Ein Kunde hat 80 Stück von Oktober auf November verschoben' },
+        { id: 'rabatt', t: 'Vertrieb, 20.10.: Rabattaktion Ersatzgetriebe, Durchschnittspreis 1.150 EUR' },
+        { id: 'einkauf', t: 'Einkauf, 30.10.: Materialpreise unverändert, Mehrkosten aus Überstunden in der Montage' },
+        { id: 'keiner', t: 'Kein Beleg nötig, die Aussage ist plausibel' } ] },
+    task: 'Die Geschäftsführung will bis 10 Uhr eine Erklärung für 103.000 EUR Abweichung. Wählen Sie höchstens vier Bausteine für Ihren Auftrag an die KI.',
+    bricks: [
+      { id: 'rolle', t: 'Rolle: Entwurf des Monatskommentars für die Geschäftsführung', w: 100 },
+      { id: 'daten', t: 'Daten anhängen: Plan, Ist, Absatz August bis Oktober, Hinweise aus Vertrieb und Einkauf', w: 300 },
+      { id: 'rechnung', t: 'Abweichung nach Menge, Preis und Kosten zerlegen, Rechnung zeigen', w: 250 },
+      { id: 'quelle', t: 'Ursache nur mit Quelle nennen, sonst als offen markieren', w: 300 },
+      { id: 'ueberzeugend', t: 'Schreibe überzeugend und professionell', w: -150 },
+      { id: 'kurz', t: 'Fasse dich kurz, höchstens drei Sätze', w: -50 },
+      { id: 'ursachen', t: 'Nenne die wichtigsten Ursachen', w: -150 },
+      { id: 'prognose', t: 'Gib eine Empfehlung für die Jahresprognose', w: -200 } ] }
 };
