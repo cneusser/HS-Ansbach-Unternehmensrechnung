@@ -68,9 +68,34 @@ button{font:inherit;cursor:pointer}
 .dt{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}.dt td{padding:5px 4px;border-bottom:1px solid #33467a}.dt td+td{text-align:right}.dt tr.b td{font-weight:700;color:var(--gold)}
 .dd{background:#22335f;border-radius:12px;padding:10px 12px;margin:10px 0}.dd summary{font-weight:700;cursor:pointer}.fm{font-size:13px!important;color:#C8D7EE}
 .pl #calc{width:100%;font:inherit;font-size:20px;padding:14px;border-radius:10px;border:0;box-sizing:border-box}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.two .chip{margin:0;text-align:center}.kick a{color:var(--gold)}
+.gl{font-size:4vh;font-weight:900}.gnames{display:flex;flex-wrap:wrap;gap:.8vh;margin-top:1.5vh}.gnames span{background:#2b3e6e;border-radius:.6vh;padding:.5vh 1vh;font-size:2vh}
+.gdice{min-height:100vh;box-sizing:border-box;color:#fff;text-align:center}.gdice p{color:#fff!important}.gdice .kick{color:#fff}.big1{font-size:150px;font-weight:900;line-height:1;margin:20px 0 0}.ort{font-size:22px!important;font-weight:800}
+.gbadge{display:inline-block;color:#fff;font-weight:800;border-radius:8px;padding:6px 12px;font-size:15px}
 .pickb{cursor:pointer;color:#fff;font:inherit;text-align:left;border:2px solid transparent}.pickb.on{border-color:var(--gold);background:#3a5190}.big:disabled{opacity:.4}
 .tn{font:inherit;font-size:2.4vh;padding:1.4vh;border-radius:1vh;border:0;width:60vw;margin:2vh 0}.top a{color:var(--gold)}</style></head><body><div id="app"></div>
 <script>window.QUIZSETS = {
+  werkstatt: { type: 'werkstatt', title: 'Prüfwerkstatt', kicker: 'Controlling im Zeitalter der KI', qr: 'qr_werkstatt.png',
+    intro: 'Das Los teilt Sie einer von drei Expertengruppen zu: Menge, Preis oder Kosten. Allein rechnen Sie Ihre Teilabweichung, in der Gruppe prüfen Sie den Teil des KI-Kommentars, der Ihren Treiber betrifft.',
+    work: { seconds: 180, title: 'Prüfwerkstatt',
+      kommentar: 'Der Deckungsbeitrag der Produktlinie Getriebe lag im Oktober mit 297.000 EUR um 103.000 EUR unter Plan.',
+      daten: [['', 'Plan', 'Ist'], ['Menge (Stück)', '1.000', '900'], ['Preis je Stück', '1.200 EUR', '1.150 EUR'], ['variable Kosten je Stück', '800 EUR', '820 EUR'], ['Deckungsbeitrag je Stück', '400 EUR', '330 EUR'], ['Deckungsbeitrag', '400.000 EUR', '297.000 EUR']],
+      aussagen: [
+        { id: 'M', ort: 'links im Raum', thema: 'Menge', abw: 'Mengenabweichung', calc: 40000, formel: 'Mengenabweichung = (Ist-Menge minus Plan-Menge) mal Plan-Deckungsbeitrag je Stück',
+          satz: 'Satz (C) des KI-Kommentars', t: 'Da der Absatz rückläufig ist, empfehlen wir, die Jahresprognose um 10 Prozent zu senken.', frage: 'Hält Satz (C) den Daten stand?', ok: false, beleg: ['verschub', 'absatz'],
+          loesung: '(900 minus 1.000) mal 400 EUR = minus 40.000 EUR; kein Trend, 80 Stück verschoben' },
+        { id: 'P', ort: 'Mitte, vorn', thema: 'Preis', abw: 'Preisabweichung', calc: 45000, formel: 'Preisabweichung = (Ist-Preis minus Plan-Preis) mal Ist-Menge',
+          satz: 'Der KI-Kommentar als Ganzes', t: 'Als Ursachen nennt der Kommentar nur den Absatzrückgang und gestiegene Stahlpreise.', frage: 'Erklärt der Kommentar die Abweichung vollständig?', ok: false, beleg: ['rabatt'],
+          loesung: '(1.150 minus 1.200) mal 900 = minus 45.000 EUR; der größte Treiber fehlt im Text' },
+        { id: 'K', ort: 'rechts im Raum', thema: 'Kosten', abw: 'Kostenabweichung', calc: 18000, formel: 'Kostenabweichung = (Plan-Kosten minus Ist-Kosten je Stück) mal Ist-Menge',
+          satz: 'Satz (B) des KI-Kommentars', t: 'Zusätzlich belasten gestiegene Stahlpreise die variablen Kosten.', frage: 'Hält Satz (B) den Daten stand?', ok: false, beleg: ['einkauf'],
+          loesung: '(800 minus 820) mal 900 = minus 18.000 EUR; Ursache Überstunden, nicht Stahl' } ],
+      belege: [
+        { id: 'absatz', t: 'Absatz: August 1.020, September 1.010, Oktober 900 Stück (Plan je 1.000)' },
+        { id: 'verschub', t: 'Vertrieb, 14.10.: Ein Kunde hat 80 Stück von Oktober auf November verschoben' },
+        { id: 'rabatt', t: 'Vertrieb, 20.10.: Rabattaktion Ersatzgetriebe, Durchschnittspreis 1.150 EUR' },
+        { id: 'einkauf', t: 'Einkauf, 30.10.: Materialpreise unverändert, Mehrkosten aus Überstunden in der Montage' },
+        { id: 'plan', t: 'Deckungsbeitrag Plan 400.000 EUR, Ist 297.000 EUR' },
+        { id: 'keiner', t: 'Kein Beleg nötig, die Aussage ist plausibel' } ] } },
   pflicht: { title: 'Blitzquiz Rückstellungen', kicker: 'Buchführung und Bilanzierung · 2. Semester', seconds: 15, qr: 'qr_pflicht.png', questions: [
     { z: 'Ziel 1 · unterscheiden', q: 'Für eine Werbekampagne im März 2027 sollen 50.000 EUR zurückgestellt werden. Rückstellung zum 31.12.2026?', o: ['Ja, Pflicht', 'Wahlrecht', 'Nein, Verbot'], a: 2,
       why: 'Keine Verpflichtung gegenüber Dritten, kein Katalogfall: § 249 Abs. 2 Satz 1 HGB.' },
@@ -82,23 +107,8 @@ button{font:inherit;cursor:pointer}
       why: 'Erfüllungsbetrag nach vernünftiger kaufmännischer Beurteilung; Restlaufzeit unter einem Jahr, also keine Abzinsung (§ 253 HGB).' },
     { z: 'Ziel 3 · buchen', q: 'Buchungssatz bei Bildung der Gewährleistungsrückstellung am 31.12.2026?', o: ['Rückstellung an Bank', 'Aufwand an Rückstellung', 'Rückstellung an Ertrag'], a: 1,
       why: 'Bei Bildung fließt kein Geld. Der Aufwand trifft 2026, die Gegenbuchung ist die Rückstellung.' } ] },
-  wahl: { type: 'builder', title: 'Prüfwerkstatt und Auftrags-Duell', kicker: 'Controlling im Zeitalter der KI', seconds: 60, maxPick: 4, qr: 'qr_wahl.png',
-    intro: 'Einmal beitreten, zwei Runden: Erst prüfen Sie eine Aussage des KI-Kommentars, dann bauen Sie den besseren Auftrag. Beide Runden zählen für die Gesamtwertung.',
-    work: { seconds: 180, title: 'Prüfwerkstatt',
-      kommentar: 'Der Deckungsbeitrag der Produktlinie Getriebe lag im Oktober mit 297.000 EUR um 103.000 EUR unter Plan.',
-      daten: [['', 'Plan', 'Ist'], ['Menge (Stück)', '1.000', '900'], ['Preis je Stück', '1.200 EUR', '1.150 EUR'], ['variable Kosten je Stück', '800 EUR', '820 EUR'], ['Deckungsbeitrag je Stück', '400 EUR', '330 EUR'], ['Deckungsbeitrag', '400.000 EUR', '297.000 EUR']],
-      formel: 'Mengenabweichung = (Ist-Menge minus Plan-Menge) mal Plan-Deckungsbeitrag je Stück. Preis (minus 45.000 EUR) und Kosten (minus 18.000 EUR) sind vorgerechnet.',
-      aussagen: [
-        { id: 'A', reihe: 'Erste Reihe', t: 'Hauptursache ist der Absatzrückgang: Mit 900 statt 1.000 Stück erklärt die geringere Menge den Großteil der Abweichung.', ok: false, beleg: ['zerl'] },
-        { id: 'B', reihe: 'Zweite Reihe', t: 'Zusätzlich belasten gestiegene Stahlpreise die variablen Kosten.', ok: false, beleg: ['einkauf'] },
-        { id: 'C', reihe: 'Dritte Reihe und dahinter', t: 'Da der Absatz rückläufig ist, empfehlen wir, die Jahresprognose um 10 Prozent zu senken.', ok: false, beleg: ['verschub', 'absatz'] } ],
-      belege: [
-        { id: 'zerl', t: 'Eigene Rechnung: Die Menge erklärt 40.000 von 103.000 EUR, der Preis 45.000 EUR' },
-        { id: 'absatz', t: 'Absatz: August 1.020, September 1.010, Oktober 900 Stück (Plan je 1.000)' },
-        { id: 'verschub', t: 'Vertrieb, 14.10.: Ein Kunde hat 80 Stück von Oktober auf November verschoben' },
-        { id: 'rabatt', t: 'Vertrieb, 20.10.: Rabattaktion Ersatzgetriebe, Durchschnittspreis 1.150 EUR' },
-        { id: 'einkauf', t: 'Einkauf, 30.10.: Materialpreise unverändert, Mehrkosten aus Überstunden in der Montage' },
-        { id: 'keiner', t: 'Kein Beleg nötig, die Aussage ist plausibel' } ] },
+  wahl: { type: 'builder', title: 'Auftrags-Duell', kicker: 'Controlling im Zeitalter der KI · Sicherung', seconds: 60, maxPick: 4, qr: 'qr_wahl.png',
+    intro: 'Bauen Sie den besten Auftrag an die KI: höchstens vier Bausteine, 60 Sekunden. Gute Bausteine und Tempo bringen Punkte, die KI antwortet auf Ihren Auftrag.',
     task: 'Die Geschäftsführung will bis 10 Uhr eine Erklärung für 103.000 EUR Abweichung. Wählen Sie höchstens vier Bausteine für Ihren Auftrag an die KI.',
     bricks: [
       { id: 'rolle', t: 'Rolle: Entwurf des Monatskommentars für die Geschäftsführung', w: 100 },
@@ -111,7 +121,8 @@ button{font:inherit;cursor:pointer}
       { id: 'prognose', t: 'Gib eine Empfehlung für die Jahresprognose', w: -200 } ] }
 };
 </script><script>// Offline-Fassung ohne Server: Beamer-Modus, Antworten per Zuruf, Handzeichen oder Farbkarte.
-const SET = window.QUIZSETS.wahl, WK = SET.work, LIMIT = SET.seconds;
+const SET = window.QUIZSETS.wahl, WK = window.QUIZSETS.werkstatt.work, LIMIT = SET.seconds;
+const GCOL = { M: '#2f7fd6', P: '#e0a526', K: '#2fa37a' };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const app = document.getElementById('app');
 function fx(kind, ms) {
@@ -170,32 +181,33 @@ function clock(sec, id, done) {
 function render() {
   clearInterval(timer);
   if (view === 'start') {
-    app.innerHTML = `<div class="host"><div class="kick">Offline-Fassung · ohne Internet</div><h1>${esc(SET.title)}</h1>
+    app.innerHTML = `<div class="host"><div class="kick">Offline-Fassung · ohne Internet</div><h1>Prüfwerkstatt und Auftrags-Duell</h1>
     <p class="sub">Für den Fall, dass das Netz im Hörsaal nicht trägt. Läuft auf dem Laptop am Beamer, die Studierenden antworten per Zuruf und Farbkarte.</p>
-    <button class="big" id="w">Runde 1: Prüfwerkstatt</button> <button class="big" id="d">Runde 2: Auftrags-Duell der Reihen</button>
+    <button class="big" id="w">Prüfwerkstatt</button> <button class="big" id="d">Auftrags-Duell der Gruppen (Sicherung)</button>
     <p class="note">Entwurf, Dr. Christian Neusser. Die KI-Antworten sind regelbasiert simuliert: gleiche Bausteine, gleiche Antwort.</p></div>`;
     document.getElementById('w').onclick = () => { view = 'work'; wRevealed = false; render(); };
     document.getElementById('d').onclick = () => { view = 'setup'; render(); }; return;
   }
   if (view === 'work') {
-    app.innerHTML = `<div class="host q"><div class="top"><span>Runde 1 · Prüfwerkstatt</span><span id="clock">3:00</span><span><a href="#" id="home">Übersicht</a></span></div>
-    <div class="hq">Allein: Mengenabweichung rechnen (Arbeitsblatt). Zu zweit: Hält Ihre Aussage den Daten stand? Beleg notieren.</div>
-    <div class="wk3">${WK.aussagen.map(x => `<div class="wkc"><div class="kick">${esc(x.reihe)} · Aussage ${x.id}</div><p>${esc(x.t)}</p>
-    ${wRevealed ? `<div class="st ok"><span>Mengenabweichung</span><b>minus 40.000 EUR</b></div><div class="st no"><span>Urteil</span><b>hält nicht stand</b></div><p class="tb ok">Beleg: ${esc(x.beleg.map(id => WK.belege.find(b => b.id === id).t).join(' oder '))}</p>` : ''}</div>`).join('')}</div>
-    <button class="big" id="go">${wRevealed ? 'Weiter zum Auftrags-Duell' : 'Auflösen'}</button>
-    <div class="keys">Zuerst Farbkarten je Reihe: grün hält stand, rot hält nicht. Dann auflösen.</div></div>`;
+    app.innerHTML = `<div class="host q"><div class="top"><span>Prüfwerkstatt</span><span id="clock">3:00</span><span><a href="#" id="home">Übersicht</a></span></div>
+    <div class="hq">Loskarte ziehen, Gruppe finden. Allein: Teilabweichung Ihrer Gruppe rechnen. In der Gruppe: den Teil des KI-Kommentars zu Ihrem Treiber prüfen, Beleg notieren, einen Satz formulieren.</div>
+    <div class="wk3">${WK.aussagen.map(x => `<div class="wkc" style="border-top:1.2vh solid ${GCOL[x.id]}"><div class="kick">Gruppe ${esc(x.thema)} · ${esc(x.ort)}</div><p>${esc(x.satz)}: „${esc(x.t)}“</p>
+    ${wRevealed ? `<div class="st ok"><span>${esc(x.abw)}</span><b>minus ${x.calc.toLocaleString('de-DE')} EUR</b></div><div class="st no"><span>Urteil</span><b>nein</b></div><p class="tb ok">Beleg: ${esc(x.beleg.map(id => WK.belege.find(b => b.id === id).t).join(' oder '))}</p>` : ''}</div>`).join('')}</div>
+    ${wRevealed ? '<div class="rv1"><h3>Zusammengeführt</h3><p class="sub">Menge minus 40.000 · Preis minus 45.000 · Kosten minus 18.000 = minus 103.000 EUR. Satz (A) fällt: Die Menge erklärt weniger als die Hälfte.</p></div>' : ''}
+    <button class="big" id="go">${wRevealed ? 'Zur Übersicht' : 'Auflösen'}</button>
+    <div class="keys">Zuerst Farbkarten je Gruppe: grün hält stand, rot hält nicht. Dann auflösen.</div></div>`;
     document.getElementById('home').onclick = e => { e.preventDefault(); view = 'start'; render(); };
-    document.getElementById('go').onclick = () => { if (!wRevealed) { wRevealed = true; render(); fx('confetti', 2500); } else { view = 'setup'; render(); } };
+    document.getElementById('go').onclick = () => { if (!wRevealed) { wRevealed = true; render(); fx('confetti', 2500); } else { view = 'start'; render(); } };
     if (!wRevealed) clock(WK.seconds, 'clock'); return;
   }
   if (view === 'setup') {
-    app.innerHTML = `<div class="host"><div class="kick">Runde 2 · Auftrags-Duell der Reihen</div><h1>Welche Reihen treten an?</h1>
-    <p class="sub">Jede Reihe einigt sich in 60 Sekunden auf höchstens vier Bausteine und ruft sie zu. Sie klicken mit, die simulierte KI antwortet.</p>
-    <input class="tn" id="tn" value="Reihe 1, Reihe 2, Reihe 3"><br><button class="big" id="go">Start: alle Reihen 60 Sekunden</button></div>`;
+    app.innerHTML = `<div class="host"><div class="kick">Runde 2 · Auftrags-Duell der Gruppen</div><h1>Welche Gruppen treten an?</h1>
+    <p class="sub">Jede Gruppe einigt sich in 60 Sekunden auf höchstens vier Bausteine und ruft sie zu. Sie klicken mit, die simulierte KI antwortet.</p>
+    <input class="tn" id="tn" value="Gruppe Menge, Gruppe Preis, Gruppe Kosten"><br><button class="big" id="go">Start: alle Gruppen 60 Sekunden</button></div>`;
     document.getElementById('go').onclick = () => { teams = document.getElementById('tn').value.split(',').map(s => s.trim()).filter(Boolean).slice(0, 6).map(n => ({ n, ids: [], pts: 0, done: false })); cur = 0; pick = []; view = 'think'; render(); }; return;
   }
   if (view === 'think') {
-    app.innerHTML = `<div class="host q"><div class="top"><span>Bauen Sie den Auftrag, alle Reihen gleichzeitig</span><span id="clock">1:00</span><span>${teams.length} Reihen</span></div>
+    app.innerHTML = `<div class="host q"><div class="top"><span>Bauen Sie den Auftrag, alle Gruppen gleichzeitig</span><span id="clock">1:00</span><span>${teams.length} Gruppen</span></div>
     <div class="hq">${esc(SET.task)}</div><div class="bricks">${SET.bricks.map(b => `<div class="brick">${esc(b.t)}</div>`).join('')}</div>
     <button class="big" id="go">Aufträge einsammeln</button></div>`;
     document.getElementById('go').onclick = () => { view = 'enter'; render(); };
@@ -215,11 +227,11 @@ function render() {
     <div class="rv"><div><h3>Gewählte Bausteine</h3>${t.ids.map(id => { const b = SET.bricks.find(x => x.id === id); return `<div class="bar ${b.w > 0 ? 'gd' : 'bd'}"><span>${esc(b.t)}</span><i style="width:100%"></i><b>${b.w > 0 ? '+' : ''}${b.w}</b></div>`; }).join('')}</div>
     <div><h3>Simulierte KI-Antwort</h3><div class="sim">${r.out.map(s => `<p class="${s.bad ? 'bad' : 'okl'}">${esc(s.t)}</p>`).join('')}</div>
     ${r.errs.length ? `<p class="note">Fehler: ${esc(r.errs.join(', '))}</p>` : ''}</div></div>
-    <button class="big" id="go">${last ? 'Siegerehrung' : 'Nächste Reihe'}</button></div>`;
+    <button class="big" id="go">${last ? 'Siegerehrung' : 'Nächste Gruppe'}</button></div>`;
     document.getElementById('go').onclick = () => { if (last) view = 'end'; else { cur++; pick = []; view = 'enter'; } render(); }; return;
   }
   const b = teams.slice().sort((x, y) => y.pts - x.pts);
-  app.innerHTML = `<div class="host end"><div class="kick">Auftrags-Duell der Reihen</div><h1>${b[0] ? esc(b[0].n) + ' gewinnt' : 'Ende'}</h1>
+  app.innerHTML = `<div class="host end"><div class="kick">Auftrags-Duell der Gruppen</div><h1>${b[0] ? esc(b[0].n) + ' gewinnt' : 'Ende'}</h1>
   <div class="podium">${[1, 0, 2].map(i => b[i] ? `<div class="p p${i + 1}"><span>${esc(b[i].n)}</span><b>${b[i].pts}</b><i>${i + 1}</i></div>` : '').join('')}</div>
   <button class="ghost" id="rs">Zur Übersicht</button></div>`;
   document.getElementById('rs').onclick = () => { view = 'start'; render(); };
