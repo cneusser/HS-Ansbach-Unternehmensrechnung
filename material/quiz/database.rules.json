@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "games": {
+      "$pin": {
+        ".read": "$pin === 'ansbach-pflicht' || $pin === 'ansbach-wahl'",
+        ".write": "$pin === 'ansbach-pflicht' || $pin === 'ansbach-wahl'",
+        "players": { "$pid": { "name": { ".validate": "newData.isString() && newData.val().length <= 16" } } }
+      }
+    }
+  }
+}

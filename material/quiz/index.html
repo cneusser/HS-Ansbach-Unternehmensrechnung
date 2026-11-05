@@ -1,0 +1,50 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live-Quiz</title>
+<style>
+:root{--navy:#1A2C5A;--ink:#252629;--slate:#4F5D78;--line:#C2CFE3;--panel:#EEF3FB;--gold:#C9A86A;--g:#1F6B4F;--y:#B8892B;--r:#9B2F2F}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{background:var(--navy);color:#fff}
+.kick{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.note{font-size:13px;color:#C8D7EE;opacity:.85;margin-top:18px}
+button{font:inherit;cursor:pointer}
+.big{background:var(--gold);color:var(--navy);border:0;border-radius:10px;padding:14px 28px;font-weight:800;font-size:20px;margin-top:20px}
+.ghost{background:transparent;color:#C8D7EE;border:1px solid #4a5c85;border-radius:10px;padding:12px 20px;margin-top:20px}
+/* Spieler */
+.pl{max-width:520px;margin:0 auto;padding:28px 18px}
+.pl h1{font-size:28px;margin:8px 0 10px}.pl p{color:#C8D7EE;font-size:17px;line-height:1.5}
+.pl form{display:flex;gap:8px;margin-top:16px}.pl input{flex:1;min-width:0;font:inherit;font-size:18px;padding:14px;border-radius:10px;border:0}
+.pl form button{background:var(--gold);border:0;border-radius:10px;padding:0 18px;font-weight:800;color:var(--navy)}
+.pq{font-size:19px!important;color:#fff!important;font-weight:700}
+.pa{display:block;width:100%;text-align:left;border:0;border-radius:14px;padding:20px 18px;margin:12px 0;color:#fff;font-size:18px;font-weight:600}
+.pa b{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:4px}
+.pa.g,.a.g{background:var(--g)}.pa.y,.a.y{background:var(--y)}.pa.r,.a.r{background:var(--r)}
+.res{text-align:center;padding-top:60px}.res.ok h1{color:#7fd1a8}.res.no h1{color:#f0a0a0}.pts{font-size:40px!important;font-weight:800;color:#fff!important;margin:10px 0}
+.res a{color:var(--gold)}
+/* Host */
+.host{padding:4vh 5vw;min-height:100vh}
+.host h1{font-size:5vh;margin:1vh 0}.host .sub{font-size:2.4vh;color:#C8D7EE;max-width:60vw}
+.lobby{display:flex;gap:4vw;align-items:center;justify-content:space-between}
+.lobby .qr{width:38vh;height:38vh;background:#fff;border-radius:12px;padding:1vh}
+.url{font-size:2vh;color:var(--gold)}.count{font-size:3vh;margin-top:2vh}.count b{font-size:6vh}
+.names{display:flex;flex-wrap:wrap;gap:1vh;margin-top:2vh;max-width:55vw}.names span{background:#2b3e6e;border-radius:20px;padding:.6vh 1.4vh;font-size:2vh}
+.top{display:flex;justify-content:space-between;font-size:2.2vh;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+#clock{font-size:5vh;color:#fff}
+.hq{font-size:4.4vh;font-weight:700;line-height:1.3;margin:3vh 0}
+.ans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2vw}
+.a{border-radius:1.6vh;padding:3vh 2vw;font-size:2.8vh;position:relative;transition:opacity .3s}
+.a b{display:block;font-size:1.8vh;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:1vh}
+.a em{position:absolute;right:2vh;top:1.5vh;font-style:normal;font-size:4vh;font-weight:800}
+.a.dim{opacity:.25}.a.win{box-shadow:0 0 0 .6vh #fff}
+.why{font-size:2.6vh;color:#C8D7EE;margin-top:3vh}
+.lb{margin-top:3vh;max-width:60vw}.lb div{display:flex;gap:2vw;font-size:2.6vh;padding:.8vh 0;border-bottom:1px solid #33467a}
+.lb div span:first-child{color:var(--gold);width:3vw}.lb div span:nth-child(2){flex:1}
+.lb.small div{font-size:2.2vh}
+.keys{position:fixed;bottom:2vh;left:5vw;font-size:1.6vh;color:#8793A8}
+.end{text-align:center}.end .lb{margin:3vh auto}
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:2vw;margin-top:4vh}
+.p{width:18vw;border-radius:1.6vh 1.6vh 0 0;background:#2b3e6e;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:2vh}
+.p span{font-size:3vh;font-weight:700}.p b{font-size:2.6vh;color:var(--gold)}.p i{font-style:normal;font-size:6vh;font-weight:800}
+.p1{height:34vh;background:var(--gold);color:var(--navy)}.p1 b{color:var(--navy)}.p2{height:26vh}.p3{height:20vh}
+</style></head><body><div id="app"></div>
+<script src="config.js"></script><script src="sets.js"></script><script type="module" src="live.js"></script>
+</body></html>
